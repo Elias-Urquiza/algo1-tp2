@@ -175,7 +175,7 @@ char** split(const char* cadena, char delimitador, size_t* l)
 	size_t n, i;
 	char *aux, *q, *linea, delim[2];
 
-	if(!cadena)
+	if(!cadena || !l)
 		return ST_ERROR_PUNTERO_NULO;
 
 	for(i = 0, n = 1; cadena[i]; i++)
