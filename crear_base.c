@@ -72,9 +72,12 @@ int main (int argc, char *argv[])
 
 	}
 
+/* Posiblemente Haya que Borrarlo Antes de Entregarlo. Sirve para Testeo. */
 	rewind(pf_salida);
 	fread(&datos, sizeof(t_datos), 1, pf_salida);
 	printf("%lu,%s,%s,%s,%s,%.0f,%lu\n", datos.id, datos.nombre, datos.autor, datos.genero, ctime(&datos.date), datos.puntaje, datos.resenas);
+/* */	
+	
 	fclose(pf_entrada);
 	fclose(pf_salida);
 
@@ -102,7 +105,7 @@ status_t validar_argumentos(int argc, char* argv[], FILE **file, int numero, cha
 
 t_datos convertir_datos(char** arreglo)
 {
-	struct tm datetm = {0,0,0,0,0,0,0,0,0};
+	struct tm datetm = {0,0,0,1,0,0,0,0,0}; /* tm_mday puede tomar valores de 1 a 31 por ello elegí poner ese uno.*/
 	char datechar[MAX_LENGTH] = "";
 	char** datearreglo = NULL;
 	t_datos datos;
