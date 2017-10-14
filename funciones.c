@@ -34,8 +34,8 @@ t_datos convertir_datos(char** arreglo)
 
 	datos.id = atoi(arreglo[0]);
 	strcpy(datos.nombre, arreglo[1]);
-	strcpy(datos.autor, arreglo[2]);
-	strcpy(datos.genero, arreglo[3]);
+	strcpy(datos.desarrollador, arreglo[2]);
+	strcpy(datos.plataforma, arreglo[3]);
 
 	strcpy(datechar, arreglo[4]);
 	datearreglo = split(datechar, '-', &l);

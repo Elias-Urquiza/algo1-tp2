@@ -53,7 +53,7 @@ int main (int argc, char *argv[])
 /* Posiblemente Haya que Borrarlo Antes de Entregarlo. Sirve para Testeo. */
 	rewind(pf_salida);
 	fread(&datos, sizeof(t_datos), 1, pf_salida);
-	printf("%lu,%s,%s,%s,%s,%.0f,%lu\n", datos.id, datos.nombre, datos.autor, datos.genero, ctime(&datos.date), datos.puntaje, datos.resenas);
+	printf("%lu,%s,%s,%s,%s,%.0f,%lu\n", datos.id, datos.nombre, datos.desarrollador, datos.plataforma, ctime(&datos.date), datos.puntaje, datos.resenas);
 /* */
 
 	fclose(pf_entrada);

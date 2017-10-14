@@ -28,8 +28,8 @@ typedef enum {ST_OK, ST_ERROR_PUNTERO_NULO, ST_ERROR_NOMEM, ST_ERROR_CANT_ARGC, 
 typedef struct {
 	size_t id;
 	char nombre[MAX_LONG_CAMPOS];
-	char autor[MAX_LONG_CAMPOS];
-	char genero[MAX_LONG_CAMPOS];
+	char desarrollador[MAX_LONG_CAMPOS];
+	char plataforma[MAX_LONG_CAMPOS];
 	time_t date;
 	double puntaje;
 	size_t resenas;
