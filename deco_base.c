@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	if ((pf_salida = fopen("datos2.csv", "wb")) == NULL)
+	if ((pf_salida = fopen("datos_deco.csv", "wb")) == NULL)
 	{
 		st = ST_ERROR_OPEN_ARCHIVO;
 		imprimir_error(st);
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 		date = *gmtime(&datos.date);
 		date.tm_year += ANIO_PARTIDA;
 		date.tm_mon += 1;
-		fprintf(pf_salida, "%lu,%s,%s,%s,%i-%i-%i,%.0f,%lu\n", datos.id, datos.nombre, datos.autor, datos.genero, date.tm_year, date.tm_mon, date.tm_mday, datos.puntaje, datos.resenas);
+		fprintf(pf_salida, "%lu,%s,%s,%s,%i-%i-%i,%.0f,%lu\n", datos.id, datos.nombre, datos.desarrollador, datos.plataforma, date.tm_year, date.tm_mon, date.tm_mday, datos.puntaje, datos.resenas);
 	}
 
 
