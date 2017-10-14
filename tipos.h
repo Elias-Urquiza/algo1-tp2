@@ -3,10 +3,12 @@
 
 /*constantes*/
 
-#define MAX_LENGTH 500
+#define CHAR_COMMENT "#"
 #define MSJ_ERROR_DESTRUIR_ARREGLO "ERROR AL DESTRUIR EL ARREGLO"
 #define MSJ_ERROR_TIME "Error con la fecha"
 #define MSJ_ERROR "Error"
+
+#define MAX_LENGTH 500
 #define MAX_ARGC_CREAR 3
 #define MAX_LONG_CAMPOS 50
 #define ANIO_PARTIDA 1900

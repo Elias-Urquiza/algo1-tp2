@@ -11,7 +11,7 @@ int main (int argc, char *argv[])
 
 	FILE *pf_entrada;
 	FILE *pf_salida;
-	char reglon[MAX_LENGTH] = "";
+	char renglon[MAX_LENGTH] = "";
 	size_t l = 1;
 	char** arreglo = NULL;
 	t_datos datos;
@@ -31,13 +31,15 @@ int main (int argc, char *argv[])
 
 
 
-	while (fgets(reglon, MAX_LENGTH, pf_entrada) != NULL)
+	while (fgets(renglon, MAX_LENGTH, pf_entrada) != NULL)
 	{
-		arreglo = split(reglon, ',', &l);
+		if(renglon[0] == CHAR_COMMENT) continue; /*salta el renglon si encuentra que el mismo es un comentario*/
+
+		arreglo = split(renglon, ',', &l);
 
 		datos = convertir_datos(arreglo);
 
-		printf("%s\n", reglon);
+		printf("%s\n", renglon);
 		fwrite(&datos, sizeof(t_datos), 1, pf_salida);
 
 		if (destruir_arreglo_cadenas(arreglo, l) != ST_OK)
