@@ -1,9 +1,8 @@
-/*hay que incluir estas en funciones.c? probar*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-/*hay que incluir estas en funciones.c? probar*/
+
 
 #include "tipos.h"
 #include "funciones.h"
@@ -77,7 +76,7 @@ char* strdup(const char* sc)
 	return s;
 }
 
-status_t destruir_arreglo_cadenas(char** campos, size_t size)
+status_t destruir_arreglo_cadenas(char** campos, size_t size) /*agregar verificación si saben cual poner*/
 {
 	size_t i;
 
@@ -141,8 +140,6 @@ char** split(const char* cadena, char delimitador, size_t* l)
 	*l = i;
 	return campos;
 }
-
-
 /* */
 
 /*deco*/
@@ -161,3 +158,30 @@ status_t validar_argumentos_deco(int argc, char* argv[], FILE **file, int numero
 
 
 /* */
+
+/*Impresiones*/
+
+imprimir_error(status_t estado)
+{
+	switch(estado)
+	{
+		case ST_ERROR_PUNTERO_NULO:
+			puts(MSJ_ERROR_PUNTERO_NULO);
+			break;
+
+		case ST_ERROR_NOMEM:
+			puts(MSJ_ERROR_NOMEM);
+			break;
+
+		case ST_ERROR_CANT_ARGC:
+			puts(MSJ_ERROR_CANT_ARGC);
+			break;
+
+		case ST_ERROR_OPEN_ARCHIVO:
+			puts(MSJ_ERROR_OPEN_ARCHIVO);
+			break;
+
+		default:
+			puts(MSJ_ERROR);
+	}
+}

@@ -17,12 +17,16 @@ int main(int argc, char* argv[])
 
 	if ((st = validar_argumentos_deco(argc, argv, &pf_entrada, 1, "r")) != ST_OK)
 	{
-		printf("%s\n", MSJ_ERROR);
+		imprimir_error(st);
 		return EXIT_FAILURE;
 	}
 
 	if ((pf_salida = fopen("datos2.csv", "wb")) == NULL)
-		return ST_ERROR_OPEN_ARCHIVO;
+	{
+		st = ST_ERROR_OPEN_ARCHIVO;
+		imprimir_error(st);
+		return EXIT_FAILURE;
+	}
 
 	while(fread(&datos, sizeof(t_datos), 1, pf_entrada))
 	{

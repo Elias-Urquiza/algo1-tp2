@@ -19,13 +19,13 @@ int main (int argc, char *argv[])
 
 	if ((st = validar_argumentos_crear(argc, argv, &pf_entrada, 1, "r")) != ST_OK)
 	{
-		printf("%s\n", MSJ_ERROR);
+		imprimir_error(st);
 		return EXIT_FAILURE;
 	}
 
 	if ((st = validar_argumentos_crear(argc, argv, &pf_salida, 2, "wr")) != ST_OK)
 	{
-		printf("%s\n", MSJ_ERROR);
+		imprimir_error(st);
 		return EXIT_FAILURE;
 	}
 
@@ -42,9 +42,9 @@ int main (int argc, char *argv[])
 		printf("%s\n", renglon);
 		fwrite(&datos, sizeof(t_datos), 1, pf_salida);
 
-		if (destruir_arreglo_cadenas(arreglo, l) != ST_OK)
+		if ((st = destruir_arreglo_cadenas(arreglo, l)) != ST_OK)
 		{
-			printf("%s\n", MSJ_ERROR_DESTRUIR_ARREGLO);
+			imprimir_error(st);
 			return EXIT_FAILURE;
 		}
 
@@ -62,5 +62,4 @@ int main (int argc, char *argv[])
 
 
 	return EXIT_SUCCESS;
-
 }
