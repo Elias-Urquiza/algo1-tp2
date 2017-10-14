@@ -35,11 +35,19 @@ int main (int argc, char *argv[])
 	{
 		if(renglon[0] == CHAR_COMMENT) continue; /*salta el renglon si encuentra que el mismo es un comentario*/
 
-		arreglo = split(renglon, ',', &l);
+		arreglo = split(renglon, ',', &l, &st);
+
+		if(st != ST_OK)
+		{
+			imprimir_error(st);
+			return EXIT_FAILURE;
+		}
 
 		datos = convertir_datos(arreglo);
 
-		printf("%s\n", renglon);
+		/*printf("%s\n", renglon);*/
+		/*CREO QUE ESTO NO SE DEBE INCLUIR*/
+
 		fwrite(&datos, sizeof(t_datos), 1, pf_salida);
 
 		if ((st = destruir_arreglo_cadenas(arreglo, l)) != ST_OK)
@@ -50,11 +58,12 @@ int main (int argc, char *argv[])
 
 	}
 
-/* Posiblemente Haya que Borrarlo Antes de Entregarlo. Sirve para Testeo. */
+/* Posiblemente Haya que Borrarlo Antes de Entregarlo. Sirve para Testeo.
+
 	rewind(pf_salida);
 	fread(&datos, sizeof(t_datos), 1, pf_salida);
 	printf("%lu,%s,%s,%s,%s,%.0f,%lu\n", datos.id, datos.nombre, datos.desarrollador, datos.plataforma, ctime(&datos.date), datos.puntaje, datos.resenas);
-/* */
+*/
 
 	fclose(pf_entrada);
 	fclose(pf_salida);

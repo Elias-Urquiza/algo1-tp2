@@ -56,7 +56,7 @@ t_datos convertir_datos(char** arreglo)
 		/*deberiamos hacer algo más aquí?*/
 	}
 
-	datos.puntaje = atoi(arreglo[5]);
+	datos.puntaje = atof(arreglo[5]);
 	datos.resenas = atoi(arreglo[6]);
 
 	return datos;
@@ -97,14 +97,17 @@ status_t destruir_arreglo_cadenas(char** campos, size_t size) /*agregar verifica
 	return ST_OK;
 }
 
-char** split(const char* cadena, char delimitador, size_t* l)
+char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado)
 {
 	char** campos;
 	size_t n, i;
 	char *aux, *q, *linea, delim[2];
 
 	if(!cadena || !l)
-		return ST_ERROR_PUNTERO_NULO;
+	{
+		*p_estado = ST_ERROR_PUNTERO_NULO;
+		return NULL;
+	}
 
 	for(i = 0, n = 1; cadena[i]; i++)
 	{
@@ -115,6 +118,7 @@ char** split(const char* cadena, char delimitador, size_t* l)
 	if((campos = (char**)malloc(sizeof(char*)*n)) == NULL)
 	{
 		*l = 0;
+		*p_estado = ST_ERROR_NOMEM;
 		return NULL;
 	}
 
@@ -123,6 +127,7 @@ char** split(const char* cadena, char delimitador, size_t* l)
 		free(campos);
 		campos = NULL;
 		*l = 0;
+		*p_estado = ST_ERROR_NOMEM;
 		return NULL;
 	}
 
@@ -133,9 +138,9 @@ char** split(const char* cadena, char delimitador, size_t* l)
 	{
 		if((campos[i] = strdup(aux)) == NULL)
 		{
-			if((destruir_arreglo_cadenas(campos, i)) != ST_OK)
+			if(*p_estado = (destruir_arreglo_cadenas(campos, i)) != ST_OK)
 			{
-				puts(MSJ_ERROR_DESTRUIR_ARREGLO);
+				imprimir_error(*estado);
 			}
 			campos = NULL;
 			*l = 0;
@@ -143,6 +148,7 @@ char** split(const char* cadena, char delimitador, size_t* l)
 	}
 	free(linea);
 	*l = i;
+	*estado = ST_OK;
 	return campos;
 }
 /* */
