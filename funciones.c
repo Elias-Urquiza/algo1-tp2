@@ -30,6 +30,7 @@ t_datos convertir_datos(char** arreglo)
 	char** datearreglo = NULL;
 	t_datos datos;
 	size_t l;
+	status_t estado;
 
 	datos.id = atoi(arreglo[0]);
 	strcpy(datos.nombre, arreglo[1]);
@@ -43,12 +44,16 @@ t_datos convertir_datos(char** arreglo)
 	datetm.tm_mday = atoi(datearreglo[2]);
 	if ((datos.date = mktime(&datetm)) == -1)
 	{
-		fprintf(stderr, "%s\n", MSJ_ERROR_TIME);
+		estado = ST_ERROR_TIME;
+		imprimir_error(estado);
+		return; /*hacer que llame a una funcion que retorna una estructura vacía*/
 	}
 
 	if (destruir_arreglo_cadenas(datearreglo, l) != ST_OK)
 	{
-		printf("%s\n", MSJ_ERROR_DESTRUIR_ARREGLO);
+		estado = ST_ERROR_DESTRUIR_ARREGLO;
+		imprimir_error(estado);
+		return; /*hacer que llame a una funcion que retorna una estructura vacía*/
 	}
 
 	datos.puntaje = atoi(arreglo[5]);
@@ -181,6 +186,14 @@ imprimir_error(status_t estado)
 			puts(MSJ_ERROR_OPEN_ARCHIVO);
 			break;
 
+		case ST_ERROR_TIME:
+			puts(MSJ_ERROR_TIME);
+			break;
+
+		case ST_ERROR_DESTRUIR_ARREGLO:
+			puts(MSJ_ERROR_DESTRUIR_ARREGLO);
+			break;
+			
 		default:
 			puts(MSJ_ERROR);
 	}
