@@ -1,9 +1,8 @@
-/*hay que incluir estas en funciones.c? probar*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-/*hay que incluir estas en funciones.c? probar*/
+
 
 #include "tipos.h"
 #include "funciones.h"
@@ -31,6 +30,7 @@ t_datos convertir_datos(char** arreglo)
 	char** datearreglo = NULL;
 	t_datos datos;
 	size_t l;
+	status_t estado;
 
 	datos.id = atoi(arreglo[0]);
 	strcpy(datos.nombre, arreglo[1]);
@@ -44,12 +44,16 @@ t_datos convertir_datos(char** arreglo)
 	datetm.tm_mday = atoi(datearreglo[2]);
 	if ((datos.date = mktime(&datetm)) == -1)
 	{
-		fprintf(stderr, "%s\n", MSJ_ERROR_TIME);
+		estado = ST_ERROR_TIME;
+		imprimir_error(estado);
+		datos.date = time(NULL); /*comprobar si esto sirve*/
 	}
 
 	if (destruir_arreglo_cadenas(datearreglo, l) != ST_OK)
 	{
-		printf("%s\n", MSJ_ERROR_DESTRUIR_ARREGLO);
+		estado = ST_ERROR_DESTRUIR_ARREGLO;
+		imprimir_error(estado);
+		/*deberiamos hacer algo más aquí?*/
 	}
 
 	datos.puntaje = atoi(arreglo[5]);
@@ -77,7 +81,7 @@ char* strdup(const char* sc)
 	return s;
 }
 
-status_t destruir_arreglo_cadenas(char** campos, size_t size)
+status_t destruir_arreglo_cadenas(char** campos, size_t size) /*agregar verificación si saben cual poner*/
 {
 	size_t i;
 
@@ -141,8 +145,6 @@ char** split(const char* cadena, char delimitador, size_t* l)
 	*l = i;
 	return campos;
 }
-
-
 /* */
 
 /*deco*/
@@ -161,3 +163,38 @@ status_t validar_argumentos_deco(int argc, char* argv[], FILE **file, int numero
 
 
 /* */
+
+/*Impresiones*/
+
+imprimir_error(status_t estado)
+{
+	switch(estado)
+	{
+		case ST_ERROR_PUNTERO_NULO:
+			puts(MSJ_ERROR_PUNTERO_NULO);
+			break;
+
+		case ST_ERROR_NOMEM:
+			puts(MSJ_ERROR_NOMEM);
+			break;
+
+		case ST_ERROR_CANT_ARGC:
+			puts(MSJ_ERROR_CANT_ARGC);
+			break;
+
+		case ST_ERROR_OPEN_ARCHIVO:
+			puts(MSJ_ERROR_OPEN_ARCHIVO);
+			break;
+
+		case ST_ERROR_TIME:
+			puts(MSJ_ERROR_TIME);
+			break;
+
+		case ST_ERROR_DESTRUIR_ARREGLO:
+			puts(MSJ_ERROR_DESTRUIR_ARREGLO);
+			break;
+
+		default:
+			puts(MSJ_ERROR);
+	}
+}
