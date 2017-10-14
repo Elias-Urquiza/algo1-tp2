@@ -46,14 +46,14 @@ t_datos convertir_datos(char** arreglo)
 	{
 		estado = ST_ERROR_TIME;
 		imprimir_error(estado);
-		return; /*hacer que llame a una funcion que retorna una estructura vacía*/
+		datos.date = time(NULL); /*comprobar si esto sirve*/
 	}
 
 	if (destruir_arreglo_cadenas(datearreglo, l) != ST_OK)
 	{
 		estado = ST_ERROR_DESTRUIR_ARREGLO;
 		imprimir_error(estado);
-		return; /*hacer que llame a una funcion que retorna una estructura vacía*/
+		/*deberiamos hacer algo más aquí?*/
 	}
 
 	datos.puntaje = atoi(arreglo[5]);
@@ -193,7 +193,7 @@ imprimir_error(status_t estado)
 		case ST_ERROR_DESTRUIR_ARREGLO:
 			puts(MSJ_ERROR_DESTRUIR_ARREGLO);
 			break;
-			
+
 		default:
 			puts(MSJ_ERROR);
 	}
