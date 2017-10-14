@@ -3,7 +3,7 @@
 
 /*constantes*/
 
-#define CHAR_COMMENT "#"
+#define CHAR_COMMENT '#'
 #define MSJ_ERROR_DESTRUIR_ARREGLO "ERROR AL DESTRUIR EL ARREGLO"
 #define MSJ_ERROR_TIME "Error con la fecha"
 #define MSJ_ERROR "Error"
