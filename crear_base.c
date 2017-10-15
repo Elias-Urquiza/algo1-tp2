@@ -19,13 +19,13 @@ int main (int argc, char *argv[])
 
 	if ((st = validar_argumentos_crear(argc, argv, &pf_entrada, 1, "r")) != ST_OK)
 	{
-		imprimir_error(st);
+		imprimir_error(st, stderr);
 		return EXIT_FAILURE;
 	}
 
 	if ((st = validar_argumentos_crear(argc, argv, &pf_salida, 2, "wr")) != ST_OK)
 	{
-		imprimir_error(st);
+		imprimir_error(st, stderr);
 		return EXIT_FAILURE;
 	}
 
@@ -39,7 +39,7 @@ int main (int argc, char *argv[])
 
 		if(st != ST_OK)
 		{
-			imprimir_error(st);
+			imprimir_error(st, stderr);
 			return EXIT_FAILURE;
 		}
 
@@ -52,7 +52,7 @@ int main (int argc, char *argv[])
 
 		if ((st = destruir_arreglo_cadenas(arreglo, l)) != ST_OK)
 		{
-			imprimir_error(st);
+			imprimir_error(st, stderr);
 			return EXIT_FAILURE;
 		}
 

@@ -140,7 +140,7 @@ char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado
 		{
 			if(*p_estado = (destruir_arreglo_cadenas(campos, i)) != ST_OK)
 			{
-				imprimir_error(*estado);
+				imprimir_error(*p_estado);
 			}
 			campos = NULL;
 			*l = 0;
@@ -148,7 +148,7 @@ char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado
 	}
 	free(linea);
 	*l = i;
-	*estado = ST_OK;
+	*p_estado = ST_OK;
 	return campos;
 }
 /* */
@@ -170,37 +170,55 @@ status_t validar_argumentos_deco(int argc, char* argv[], FILE **file, int numero
 
 /* */
 
+/*gestión*/
+
+
+/* */
 /*Impresiones*/
 
-imprimir_error(status_t estado)
+void imprimir_error(status_t estado, FILE* salida)
 {
 	switch(estado)
 	{
 		case ST_ERROR_PUNTERO_NULO:
-			puts(MSJ_ERROR_PUNTERO_NULO);
+			fprintf(salida, "%s\n", MSJ_ERROR_PUNTERO_NULO);
 			break;
 
 		case ST_ERROR_NOMEM:
-			puts(MSJ_ERROR_NOMEM);
+			fprintf(salida, "%s\n", MSJ_ERROR_NOMEM);
 			break;
 
 		case ST_ERROR_CANT_ARGC:
-			puts(MSJ_ERROR_CANT_ARGC);
+			fprintf(salida, "%s\n", MSJ_ERROR_CANT_ARGC);
 			break;
 
 		case ST_ERROR_OPEN_ARCHIVO:
-			puts(MSJ_ERROR_OPEN_ARCHIVO);
+			fprintf(salida, "%s\n", MSJ_ERROR_OPEN_ARCHIVO);
 			break;
 
 		case ST_ERROR_TIME:
-			puts(MSJ_ERROR_TIME);
+			fprintf(salida, "%s\n", MSJ_ERROR_TIME);
 			break;
 
 		case ST_ERROR_DESTRUIR_ARREGLO:
-			puts(MSJ_ERROR_DESTRUIR_ARREGLO);
+			fprintf(salida, "%s\n", MSJ_ERROR_DESTRUIR_ARREGLO);
 			break;
 
+		case ST_ERROR_FLAGS:
+			fprintf(salida, "%s\n", MSJ_ERROR_FLAGS);
+			break;
+
+		case ST_ERROR_COMANDO:
+			fprintf(salida, "%s\n", MSJ_ERROR_COMANDO);
+			break;
+			
 		default:
-			puts(MSJ_ERROR);
+			fprintf(salida, "%s\n", MSJ_ERROR);
 	}
+}
+
+void imprimir_uso_gestion(void)
+{
+	fprintf(stderr, "%s\n", MSJ_USO_GESTION);
+	return;
 }
