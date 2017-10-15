@@ -38,7 +38,12 @@ t_datos convertir_datos(char** arreglo)
 	strcpy(datos.plataforma, arreglo[3]);
 
 	strcpy(datechar, arreglo[4]);
-	datearreglo = split(datechar, '-', &l);
+	datearreglo = split(datechar, '-', &l, &estado);
+	if(estado != ST_OK)
+	{
+		imprimir_error(estado, stderr);
+		/*NO SE QUE MAS PONER AQUI*/
+	}
 	datetm.tm_year = atoi(datearreglo[0]) - ANIO_PARTIDA;
 	datetm.tm_mon = atoi(datearreglo[1]) - 1;
 	datetm.tm_mday = atoi(datearreglo[2]);
