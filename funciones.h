@@ -9,7 +9,7 @@ status_t validar_argumentos_crear(int argc, char* argv[], FILE **file, int numer
 t_datos convertir_datos(char** arreglo);
 char* strdup(const char* sc);
 status_t destruir_arreglo_cadenas(char** campos, size_t size);
-char** split(const char* cadena, char delimitador, size_t* l);
+char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado);
 
 /* */
 

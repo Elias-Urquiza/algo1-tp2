@@ -45,14 +45,14 @@ t_datos convertir_datos(char** arreglo)
 	if ((datos.date = mktime(&datetm)) == -1)
 	{
 		estado = ST_ERROR_TIME;
-		imprimir_error(estado);
+		imprimir_error(estado, stderr);
 		datos.date = time(NULL); /*comprobar si esto sirve*/
 	}
 
 	if (destruir_arreglo_cadenas(datearreglo, l) != ST_OK)
 	{
 		estado = ST_ERROR_DESTRUIR_ARREGLO;
-		imprimir_error(estado);
+		imprimir_error(estado, stderr);
 		/*deberiamos hacer algo más aquí?*/
 	}
 
@@ -140,7 +140,7 @@ char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado
 		{
 			if(*p_estado = (destruir_arreglo_cadenas(campos, i)) != ST_OK)
 			{
-				imprimir_error(*p_estado);
+				imprimir_error(*p_estado, stderr);
 			}
 			campos = NULL;
 			*l = 0;
@@ -211,7 +211,7 @@ void imprimir_error(status_t estado, FILE* salida)
 		case ST_ERROR_COMANDO:
 			fprintf(salida, "%s\n", MSJ_ERROR_COMANDO);
 			break;
-			
+
 		default:
 			fprintf(salida, "%s\n", MSJ_ERROR);
 	}
