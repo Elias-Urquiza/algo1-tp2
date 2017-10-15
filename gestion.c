@@ -8,9 +8,9 @@
 #define OPCION_ORIG "-if"
 #define OPCION_REG "-f"
 #define OPCION_LOG "-log"
-#define CHAR_ORIG "i"
-#define CHAR_REG "f"
-#define CHAR_LOG "l"
+#define CHAR_ORIG 'i'
+#define CHAR_REG 'f'
+#define CHAR_LOG 'l'
 #define CHAR_ALTA 'A'
 #define CHAR_BAJA 'B'
 #define CHAR_MODIF 'M'
