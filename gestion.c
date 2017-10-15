@@ -16,11 +16,9 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 
 int main(int argc, char* argv[])
 {
-	const char *flag[] = {OPCION_ORIG, OPCION_REG, OPCION_LOG};
 	status_t estado;
 	gestion_t accion;
 	FILE *pf_original, *pf_registro, *pf_log;
-	int i, j;
 
 	if((estado = validar_argumentos_gestion(argc, argv, &pf_original, &pf_registro, &pf_log, &accion)) != ST_OK)
 	{
@@ -36,7 +34,7 @@ int main(int argc, char* argv[])
 			/**/
 			break;
 		}
-		case GESTION_BAJA:
+		case GESTION_BAJAS:
 		{
 			/**/
 			break;
@@ -57,7 +55,7 @@ int main(int argc, char* argv[])
 	fclose(pf_original);
 	fclose(pf_salida);
 	fclose(pf_log);
-	
+
 	return EXIT_SUCCESS;
 }
 
@@ -128,7 +126,7 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 			break;
 
 		case CHAR_BAJA:
-			*accion = GESTION_BAJA;
+			*accion = GESTION_BAJAS;
 			break;
 
 		case CHAR_MODIF:
