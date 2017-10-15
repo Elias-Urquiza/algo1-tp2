@@ -54,6 +54,10 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	fclose(pf_original);
+	fclose(pf_salida);
+	fclose(pf_log);
+	
 	return EXIT_SUCCESS;
 }
 
