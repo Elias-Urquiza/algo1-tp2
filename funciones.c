@@ -143,7 +143,7 @@ char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado
 	{
 		if((campos[i] = strdup(aux)) == NULL)
 		{
-			if(*p_estado = (destruir_arreglo_cadenas(campos, i)) != ST_OK)
+			if((*p_estado = destruir_arreglo_cadenas(campos, i)) != ST_OK)
 			{
 				imprimir_error(*p_estado, stderr);
 			}
