@@ -8,6 +8,9 @@
 #define OPCION_ORIG "-if"
 #define OPCION_REG "-f"
 #define OPCION_LOG "-log"
+#define CHAR_ORIG "i"
+#define CHAR_REG "f"
+#define CHAR_LOG "l"
 #define CHAR_ALTA 'A'
 #define CHAR_BAJA 'B'
 #define CHAR_MODIF 'M'
@@ -83,9 +86,9 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 			return ST_ERROR_FLAGS;
 		}
 
-		switch(flag[j]) /*lee la opcion*/
+		switch(flag[j][1]) /*segun el caracter principal de cada opcion*/
 		{
-			case OPCION_ORIG:
+			case CHAR_ORIG:
 				{
 					if((*pf_original = fopen(argv[i+1], "rb+")) == NULL)
 					{
@@ -94,7 +97,7 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 					break;
 				}
 
-			case OPCION_REG:
+			case CHAR_REG:
 				{
 					if((*pf_registro = fopen(argv[i+1], "rb")) == NULL)
 					{
@@ -103,7 +106,7 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 					break;
 				}
 
-			case OPCION_LOG:
+			case CHAR_LOG:
 				{
 					if((*pf_log = fopen(argv[i+1], "a+")) == NULL)
 					{
