@@ -225,7 +225,7 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 
 		case CHAR_LOG:
 		{
-			if((*pf_log = fopen(argv[i+1], "ab+")) == NULL)
+			if((*pf_log = fopen(argv[i+1], "a+b")) == NULL)
 			{
 				return ST_ERROR_PUNTERO_NULO;
 			}
@@ -350,9 +350,6 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 
 			else
 			{
-				if ((fwrite(datos_original[j], sizeof(t_datos), 1, pf)) != 1)
-					return ST_ERROR_WRITE;
-
 				/*imprime aviso de logueo y datos decodificados en log*/
 				imprimir_error(caso_logueo, p_log);
 
@@ -361,6 +358,7 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 				date.tm_mon += 1;
 				impresion_datos(p_log, datos_registro[j], date);
 				j++;
+			}
 		}
 
 		else if (datos_original[i] != NULL)
