@@ -19,9 +19,9 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 status_t crear_datos(FILE *pf, t_datos *datos[]);
 status_t reescribir_datos(t_datos *datos[], FILE *pf);
 status_t destruir_datos(t_datos *datos[]);
-status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro);
-status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro);
-status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro);
+status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[]);
+status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[]);
+status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[]);
 
 
 
@@ -232,6 +232,19 @@ status_t crear_datos(FILE *pf, t_datos *datos[])
 status_t reescribir_datos(t_datos *datos[], FILE *pf)
 {
 
+	size_t i;
+
+	if((pf = freopen(pf, "wb")) == NULL)
+	{
+		return ST_ERROR_OPEN_ARCHIVO;
+	}
+
+	for (i = 0; datos[i]; i++)
+	{
+		if ((fwrite(datos[i], sizeof(t_datos), 1, pf)) != 1)
+			return ST_ERROR_WRITE;
+	}
+
 	return ST_OK;
 }
 
@@ -241,19 +254,19 @@ status_t destruir_datos(t_datos *datos[])
 	return ST_OK;
 }
 
-status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro)
+status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[])
 {
 
 	return ST_OK;
 }
 
-status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro)
+status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[])
 {
 
 	return ST_OK;
 }
 
-status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro)
+status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[])
 {
 
 	return ST_OK;

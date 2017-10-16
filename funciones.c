@@ -185,40 +185,44 @@ void imprimir_error(status_t estado, FILE* salida)
 {
 	switch(estado)
 	{
-		case ST_ERROR_PUNTERO_NULO:
-			fprintf(salida, "%s\n", MSJ_ERROR_PUNTERO_NULO);
-			break;
+	case ST_ERROR_PUNTERO_NULO:
+		fprintf(salida, "%s\n", MSJ_ERROR_PUNTERO_NULO);
+		break;
 
-		case ST_ERROR_NOMEM:
-			fprintf(salida, "%s\n", MSJ_ERROR_NOMEM);
-			break;
+	case ST_ERROR_NOMEM:
+		fprintf(salida, "%s\n", MSJ_ERROR_NOMEM);
+		break;
 
-		case ST_ERROR_CANT_ARGC:
-			fprintf(salida, "%s\n", MSJ_ERROR_CANT_ARGC);
-			break;
+	case ST_ERROR_CANT_ARGC:
+		fprintf(salida, "%s\n", MSJ_ERROR_CANT_ARGC);
+		break;
 
-		case ST_ERROR_OPEN_ARCHIVO:
-			fprintf(salida, "%s\n", MSJ_ERROR_OPEN_ARCHIVO);
-			break;
+	case ST_ERROR_OPEN_ARCHIVO:
+		fprintf(salida, "%s\n", MSJ_ERROR_OPEN_ARCHIVO);
+		break;
 
-		case ST_ERROR_TIME:
-			fprintf(salida, "%s\n", MSJ_ERROR_TIME);
-			break;
+	case ST_ERROR_TIME:
+		fprintf(salida, "%s\n", MSJ_ERROR_TIME);
+		break;
 
-		case ST_ERROR_DESTRUIR_ARREGLO:
-			fprintf(salida, "%s\n", MSJ_ERROR_DESTRUIR_ARREGLO);
-			break;
+	case ST_ERROR_DESTRUIR_ARREGLO:
+		fprintf(salida, "%s\n", MSJ_ERROR_DESTRUIR_ARREGLO);
+		break;
 
-		case ST_ERROR_FLAGS:
-			fprintf(salida, "%s\n", MSJ_ERROR_FLAGS);
-			break;
+	case ST_ERROR_FLAGS:
+		fprintf(salida, "%s\n", MSJ_ERROR_FLAGS);
+		break;
 
-		case ST_ERROR_COMANDO:
-			fprintf(salida, "%s\n", MSJ_ERROR_COMANDO);
-			break;
+	case ST_ERROR_COMANDO:
+		fprintf(salida, "%s\n", MSJ_ERROR_COMANDO);
+		break;
 
-		default:
-			fprintf(salida, "%s\n", MSJ_ERROR);
+	case ST_ERROR_WRITE:
+		fprintf(salida, "%s\n", MSJ_ERROR_WRITE);
+		break;
+
+	default:
+		fprintf(salida, "%s\n", MSJ_ERROR);
 	}
 }
 
