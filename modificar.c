@@ -258,7 +258,6 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 		return ST_ERROR_OPEN_ARCHIVO;
 	}
 
-	printf("%lu\n", datos_registro[2]->id );
 
 	for (i = 0, j =0; datos_original[i] != NULL || datos_registro[j] != NULL; )
 	{
@@ -267,30 +266,24 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 		{
 			if (datos_original[i]->id < datos_registro[j]->id)
 			{
-				printf("1\n");
 				if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
 					return ST_ERROR_WRITE;
 				i++;
 			}
 			else if (datos_original[i]->id > datos_registro[j]->id)
 			{
-				printf("2\n");
 				if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
 					return ST_ERROR_WRITE;
 				j++;
-				printf("2bis\n");
-
 			}
 			else
 			{
-				printf("5\n");
 				j++; /*si los ids son iguales, no ecribimos el nuevo datos*/
 			}
 		}
 
 		else if (datos_original[i] != NULL)
 		{
-			printf("3\n");
 			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
 				return ST_ERROR_WRITE;
 			i++;
@@ -298,7 +291,6 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 
 		else if (datos_registro[j] != NULL)
 		{
-			printf("4\n");
 			if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
 				return ST_ERROR_WRITE;
 			j++;
