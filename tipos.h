@@ -14,6 +14,7 @@
 #define MSJ_ERROR_COMANDO "No se puede realizar la acción pedida."
 #define MSJ_ERROR_WRITE "No se puede escribir en el archivo"
 #define MSJ_ERROR "Error."
+
 #define MSJ_USO_GESTION "USO: ./gestion operacion -if base_datos -f archivo_registro -log archivo_logs"
 
 #define MAX_LENGTH 500

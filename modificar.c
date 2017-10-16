@@ -16,8 +16,8 @@
 #define CHAR_MODIF 'M'
 
 status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion);
-status_t crear_datos(FILE *pf, t_datos *datos[]);
-status_t reescribir_datos(t_datos *datos[], FILE *pf);
+status_t crear_datos(FILE *pf, t_datos **datos[]);
+status_t reescribir_datos(t_datos *datos[], FILE *pf, char *argv[]);
 status_t destruir_datos(t_datos *datos[]);
 status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[]);
 status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[]);
@@ -42,17 +42,18 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	if((estado = crear_datos(pf_original, datos_original)) != ST_OK)
+	if((estado = crear_datos(pf_original, &datos_original)) != ST_OK)
 	{
 		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
 	}
 
-	if((estado = crear_datos(pf_registro, datos_registro)) != ST_OK)
+	if((estado = crear_datos(pf_registro, &datos_registro)) != ST_OK)
 	{
 		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
 	}
+
 
 	switch(accion)
 	{
@@ -91,7 +92,7 @@ int main(int argc, char* argv[])
 	}
 	}
 
-	if((estado = reescribir_datos(datos_original, pf_original)) != ST_OK)
+	if((estado = reescribir_datos(datos_original, pf_original, argv)) != ST_OK)
 	{
 		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
@@ -147,7 +148,7 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 		{
 		case CHAR_ORIG:
 		{
-			if((*pf_original = fopen(argv[i+1], "r+b")) == NULL)
+			if((*pf_original = fopen(argv[i+1], "rb")) == NULL)
 			{
 				return ST_ERROR_PUNTERO_NULO;
 			}
@@ -203,50 +204,58 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 
 
 
-status_t crear_datos(FILE *pf, t_datos *datos[])
+status_t crear_datos(FILE *pf, t_datos **datos[])
 {
-	size_t i = -1, n;
+	size_t i, n;
 
 	fseek(pf, 0, SEEK_END);
 	n = ftell(pf)/(sizeof(t_datos)); /*number of datos in the file*/
 	fseek(pf, 0, SEEK_SET);
 
-	if ((datos = (t_datos**)malloc(sizeof(t_datos*)*n)) == NULL)
+	if ((*datos = (t_datos**)malloc(sizeof(t_datos*)*(n+1))) == NULL)
 	{
 		return ST_ERROR_NOMEM;
 	}
 
 	for(i = 0; i < n; i++)
 	{
-		if ((datos[i] = (t_datos*)malloc(sizeof(t_datos))) == NULL)
+		if (((*datos)[i] = (t_datos*)malloc(sizeof(t_datos))) == NULL)
 		{
 			return ST_ERROR_NOMEM;
 		}
-		fread(datos[i], sizeof(t_datos), 1, pf);
-		printf("%lu,%s,%s,%s,%s,%.0f,%lu\n", (datos[i])->id, (datos[i])->nombre, (datos[i])->desarrollador, (datos[i])->plataforma, ctime(&((datos[i])->date)), (datos[i])->puntaje, (datos[i])->resenas);
+		fread((*datos)[i], sizeof(t_datos), 1, pf);
 	}
+
+	(*datos)[n] = NULL;
 
 	return ST_OK;
 }
 
-status_t reescribir_datos(t_datos *datos[], FILE *pf)
+status_t reescribir_datos(t_datos *datos[], FILE *pf, char *argv[])
 {
 
-	size_t i;
+	size_t i = 1;
 
-	if((pf = freopen(pf, "wb")) == NULL)
+	while(argv[i][1] != CHAR_ORIG)
+	{
+		i++;
+	}
+
+	if((pf = freopen(argv[i + 1], "wb", pf)) == NULL) /*erase the file*/
 	{
 		return ST_ERROR_OPEN_ARCHIVO;
 	}
 
-	for (i = 0; datos[i]; i++)
+
+	for (i = 0; datos[i] != NULL; i++)
 	{
 		if ((fwrite(datos[i], sizeof(t_datos), 1, pf)) != 1)
 			return ST_ERROR_WRITE;
 	}
-
 	return ST_OK;
 }
+
+
 
 status_t destruir_datos(t_datos *datos[])
 {
