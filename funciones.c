@@ -54,7 +54,7 @@ t_datos convertir_datos(char** arreglo)
 		datos.date = time(NULL); /*comprobar si esto sirve*/
 	}
 
-	if (destruir_arreglo_cadenas(datearreglo, l) != ST_OK)
+	if (destruir_arreglo_cadenas(&datearreglo, l) != ST_OK)
 	{
 		estado = ST_ERROR_DESTRUIR_ARREGLO;
 		imprimir_error(estado, stderr);
@@ -86,18 +86,18 @@ char* strdup(const char* sc)
 	return s;
 }
 
-status_t destruir_arreglo_cadenas(char** campos, size_t size) /*agregar verificación si saben cual poner*/
+status_t destruir_arreglo_cadenas(char ***campos, size_t size) /*agregar verificación si saben cual poner*/
 {
 	size_t i;
 
 	for(i = 0; i < size; i++)
 	{
-		free(campos[i]);
-		campos[i] = NULL;
+		free((*campos)[i]);
+		(*campos)[i] = NULL;
 	}
 
-	free(campos);
-	campos = NULL;
+	free(*campos);
+	*campos = NULL;
 
 	return ST_OK;
 }
@@ -143,7 +143,7 @@ char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado
 	{
 		if((campos[i] = strdup(aux)) == NULL)
 		{
-			if((*p_estado = destruir_arreglo_cadenas(campos, i)) != ST_OK)
+			if((*p_estado = destruir_arreglo_cadenas(&campos, i)) != ST_OK)
 			{
 				imprimir_error(*p_estado, stderr);
 			}

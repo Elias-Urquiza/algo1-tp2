@@ -16,7 +16,6 @@ int main (int argc, char *argv[])
 	char** arreglo = NULL;
 	t_datos datos;
 	status_t st;
-	struct tm date;
 
 
 	if ((st = validar_argumentos_crear(argc, argv, &pf_entrada, 1, "r")) != ST_OK)
@@ -49,7 +48,7 @@ int main (int argc, char *argv[])
 
 		fwrite(&datos, sizeof(t_datos), 1, pf_salida);
 
-		if ((st = destruir_arreglo_cadenas(arreglo, l)) != ST_OK)
+		if ((st = destruir_arreglo_cadenas(&arreglo, l)) != ST_OK)
 		{
 			imprimir_error(st, stderr);
 			return EXIT_FAILURE;
@@ -58,18 +57,6 @@ int main (int argc, char *argv[])
 
 
 	fclose(pf_entrada);
-
-	/* TO ERASE !!
-	   fseek(pf_salida, 0, SEEK_SET);
-
-	   while(fread(&datos, sizeof(t_datos), 1, pf_salida))
-	   {
-	        date = *gmtime(&datos.date);
-	        date.tm_year += ANIO_PARTIDA;
-	        date.tm_mon += 1;
-	        fprintf(stdout, "%lu,%s,%s,%s,%i-%i-%i,%.0f,%lu\n", datos.id, datos.nombre, datos.desarrollador, datos.plataforma, date.tm_year, date.tm_mon, date.tm_mday, datos.puntaje, datos.resenas);
-	   }*/
-
 	fclose(pf_salida);
 
 	return EXIT_SUCCESS;
