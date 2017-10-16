@@ -175,7 +175,317 @@ status_t validar_argumentos_deco(int argc, char* argv[], FILE **file, int numero
 
 /* */
 
-/*gestión*/
+/*modificar_base*/
+
+status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion, size_t* pos_original)
+{
+	const char *flag[] = {OPCION_ORIG, OPCION_REG, OPCION_LOG};
+	int i, j;
+
+	if(argc != MAX_ARGC_GESTION)
+	{
+		return ST_ERROR_FLAGS;
+	}
+
+	for(i = 2; i < argc; i+=2) /* empieza en 2 y aumenta en 2 para leer cada flag*/
+	{
+		for(j = 0; j < sizeof(flag)/sizeof(flag[0]); j++)
+		{
+			if(!(strcmp(argv[i], flag[j]))) /*se detiene cuando encuentra un flag*/
+				break;
+		}
+
+		if(j == sizeof(flag)/sizeof(flag[0]))
+		{
+			return ST_ERROR_FLAGS;
+		}
+
+		switch(flag[j][1]) /*segun el caracter principal de cada opcion*/
+		{
+		case CHAR_ORIG:
+		{
+			if((*pf_original = fopen(argv[i+1], "rb")) == NULL)
+			{
+				return ST_ERROR_PUNTERO_NULO;
+			}
+
+			*pos_original = i + 1;
+
+			break;
+		}
+
+		case CHAR_REG:
+		{
+			if((*pf_registro = fopen(argv[i+1], "rb")) == NULL)
+			{
+				return ST_ERROR_PUNTERO_NULO;
+			}
+			break;
+		}
+
+		case CHAR_LOG:
+		{
+			if((*pf_log = fopen(argv[i+1], "ab+")) == NULL)
+			{
+				return ST_ERROR_PUNTERO_NULO;
+			}
+			break;
+		}
+		default:
+		{
+			return ST_ERROR_FLAGS;
+		}
+		}
+	}
+
+	switch(argv[1][0])
+	{
+	case CHAR_ALTA:
+		*accion = GESTION_ALTAS;
+		break;
+
+	case CHAR_BAJA:
+		*accion = GESTION_BAJAS;
+		break;
+
+	case CHAR_MODIF:
+		*accion = GESTION_MODIFICACION;
+		break;
+
+	default:
+		*accion = GESTION_NULA;
+	}
+
+	return ST_OK;
+}
+
+
+
+status_t crear_datos(FILE *pf, t_datos **datos[])
+{
+	size_t i, n;
+
+	if (!pf || !datos)
+		return ST_ERROR_PUNTERO_NULO;
+
+	fseek(pf, 0, SEEK_END);
+	n = ftell(pf)/(sizeof(t_datos)); /*esto representa el numero de datos en el archivo*/
+	fseek(pf, 0, SEEK_SET);
+
+	if ((*datos = (t_datos**)malloc(sizeof(t_datos*)*(n+1))) == NULL)
+	{
+		return ST_ERROR_NOMEM;
+	}
+
+	for(i = 0; i < n; i++)
+	{
+		if (((*datos)[i] = (t_datos*)malloc(sizeof(t_datos))) == NULL)
+		{
+			return ST_ERROR_NOMEM;
+		}
+		fread((*datos)[i], sizeof(t_datos), 1, pf);
+	}
+
+	(*datos)[n] = NULL;
+
+	return ST_OK;
+}
+
+
+
+
+status_t destruir_datos(t_datos **datos[])
+{
+	int i;
+
+	if (!datos)
+		return ST_ERROR_PUNTERO_NULO;
+
+
+	for (i = 0; (*datos)[i]; i++)
+	{
+		free((*datos)[i]);
+		(*datos)[i] = NULL;
+	}
+	free(*datos);
+	*datos = NULL;
+
+	return ST_OK;
+}
+
+
+status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, FILE *plog, char *argv[], size_t pos_original)
+{
+	status_t caso_logueo = ST_LOG_ALTA;
+	size_t i, j;
+	struct tm date;
+
+	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+		return ST_ERROR_PUNTERO_NULO;
+
+	if((pf = freopen(argv[pos_original], "wb", pf)) == NULL) /*erase the file*/
+	{
+		return ST_ERROR_OPEN_ARCHIVO;
+	}
+
+
+	for (i = 0, j =0; datos_original[i] != NULL || datos_registro[j] != NULL; )
+	{
+
+		if ((datos_original[i] != NULL) && (datos_registro[j] != NULL))
+		{
+			if (datos_original[i]->id < datos_registro[j]->id)
+			{
+				if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+				i++;
+			}
+
+			if (datos_original[i]->id > datos_registro[j]->id)
+			{
+				if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+				j++;
+			}
+
+			else
+			{
+				if ((fwrite(datos_original[j], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+
+				/*imprime aviso de logueo y datos decodificados en log*/
+				imprimir_error(caso_logueo, p_log);
+
+				date = *gmtime(&datos_registro[j].date);
+				date.tm_year += ANIO_PARTIDA;
+				date.tm_mon += 1;
+				impresion_datos(p_log, datos_registro[j], date);
+				j++;
+		}
+
+		else if (datos_original[i] != NULL)
+		{
+			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
+			i++;
+		}
+
+		else if (datos_registro[j] != NULL)
+		{
+			if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
+			j++;
+		}
+	}
+
+	return ST_OK;
+}
+
+
+
+status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, FILE *plog, char *argv[], size_t pos_original)
+{
+	size_t i, j;
+	status_t caso_logueo = ST_LOG_BAJA;
+	struct tm date;
+
+	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+		return ST_ERROR_PUNTERO_NULO;
+
+	if((pf = freopen(argv[pos_original], "wb", pf)) == NULL) /*erase the file*/
+	{
+		return ST_ERROR_OPEN_ARCHIVO;
+	}
+
+	for (i = 0, j = 0; datos_original[i]; i++)
+	{
+		if (datos_registro[j])
+		{
+			if(datos_original[i]->id == datos_registro[j]->id)
+			{
+				j++; /* se saltea aquel item que se desea eliminar*/
+			}
+			else if(datos_original[i]->id < datos_registro[j]->id)
+			{
+				if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+			}
+			else
+			{
+				/*imprime un mensaje de aviso de logueo en log e imprime el item decodificado*/
+				imprimir_error(caso_logueo, p_log);
+
+				date = *gmtime(&datos_registro[j].date);
+				date.tm_year += ANIO_PARTIDA;
+				date.tm_mon += 1;
+				impresion_datos(p_log, datos_registro[j], date);
+				j++;
+				i--;
+			}
+		}
+		else
+		{
+			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
+		}
+	}
+
+	return ST_OK;
+}
+
+
+status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, FILE *plog, char *argv[], size_t pos_original)
+{
+	status_t caso_logueo = ST_LOG_MODIF;
+	size_t i, j;
+	struct tm date;
+
+	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+		return ST_ERROR_PUNTERO_NULO;
+
+	if((pf = freopen(argv[pos_original], "wb", pf)) == NULL) /*erase the file*/
+	{
+		return ST_ERROR_OPEN_ARCHIVO;
+	}
+
+	for (i = 0, j = 0; datos_original[i]; i++)
+	{
+		if (datos_registro[j])
+		{
+			if(datos_original[i]->id == datos_registro[j]->id)
+			{
+				if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+				j++;
+
+			}
+			else if(datos_original[i]->id < datos_registro[j]->id)
+			{
+				if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+			}
+			else
+			{
+				/*imprime mensaje de logueo y los datos decodificados en el log*/
+				imprimir_error(caso_logueo, p_log);
+
+				date = *gmtime(&datos_registro[j].date);
+				date.tm_year += ANIO_PARTIDA;
+				date.tm_mon += 1;
+				impresion_datos(p_log, datos_registro[j], date);
+				j++;
+				i--;
+			}
+		}
+		else
+		{
+			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
+		}
+	}
+
+	return ST_OK;
+}
 
 
 /* */
@@ -221,13 +531,33 @@ void imprimir_error(status_t estado, FILE* salida)
 		fprintf(salida, "%s\n", MSJ_ERROR_WRITE);
 		break;
 
+	case ST_LOG_ALTA:
+		fprintf(salida, "%s\n", MSJ_LOG_ALTA);
+		break;
+
+	case ST_LOG_BAJA:
+		fprintf(salida, "%s\n", MSJ_LOG_BAJA);
+		break;
+
+	case ST_LOG_MODIF:
+		fprintf(salida, "%s\n", MSJ_LOG_MODIF);
+		break;
+
 	default:
 		fprintf(salida, "%s\n", MSJ_ERROR);
 	}
+
+	return;
 }
 
 void imprimir_uso_gestion(void)
 {
 	fprintf(stderr, "%s\n", MSJ_USO_GESTION);
+	return;
+}
+
+void impresion_datos(FILE* pf_salida, t_datos datos, struct tm date)
+{
+	fprintf(pf_salida, "%lu,%s,%s,%s,%i-%i-%i,%.0f,%lu\n", datos.id, datos.nombre, datos.desarrollador, datos.plataforma, date.tm_year, date.tm_mon, date.tm_mday, datos.puntaje, datos.resenas);
 	return;
 }

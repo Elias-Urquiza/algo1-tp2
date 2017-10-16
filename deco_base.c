@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 		date = *gmtime(&datos.date);
 		date.tm_year += ANIO_PARTIDA;
 		date.tm_mon += 1;
-		fprintf(pf_salida, "%lu,%s,%s,%s,%i-%i-%i,%.0f,%lu\n", datos.id, datos.nombre, datos.desarrollador, datos.plataforma, date.tm_year, date.tm_mon, date.tm_mday, datos.puntaje, datos.resenas);
+		impresion_datos(pf_salida, datos, date);
 	}
 
 

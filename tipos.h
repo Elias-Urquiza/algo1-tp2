@@ -1,7 +1,7 @@
 #ifndef TIPOS__H
 #define TIPOS__H
 
-/*constantes*/
+/*mensajes, opciones y caracteres*/
 
 #define CHAR_COMMENT '#'
 #define MSJ_ERROR_NOMEM "Sin Memoria Suficiente."
@@ -12,11 +12,28 @@
 #define MSJ_ERROR_TIME "Error con la fecha."
 #define MSJ_ERROR_FLAGS "No se encuentra ningún flag."
 #define MSJ_ERROR_COMANDO "No se puede realizar la acción pedida."
-#define MSJ_ERROR_WRITE "No se puede escribir en el archivo"
-#define MSJ_ERROR "Error."
+#define MSJ_ERROR_WRITE "No se puede escribir en el archivo."
+#define MSJ_ERROR "Error No Catalogado."
 
-#define MSJ_USO_GESTION "USO: ./gestion operacion -if base_datos -f archivo_registro -log archivo_logs"
+#define MSJ_LOG_ALTA "#Error de Alta: Item ya Existente"
+#define MSJ_LOG_BAJA "#Error de Baja: Item no Existente"
+#define MSJ_LOG_MODIF "#Error de Modificación: No se encuentra el Item"
 
+/*modificar_base*/
+#define MSJ_USO_GESTION "USO: ./modificar_base operacion -if base_datos -f archivo_registro -log archivo_logs"
+
+#define OPCION_ORIG "-if"
+#define OPCION_REG "-f"
+#define OPCION_LOG "-log"
+#define CHAR_ORIG 'i'
+#define CHAR_REG 'f'
+#define CHAR_LOG 'l'
+#define CHAR_ALTA 'A'
+#define CHAR_BAJA 'B'
+#define CHAR_MODIF 'M'
+/**/
+
+/*constantes*/
 #define MAX_LENGTH 500
 #define MAX_ARGC_CREAR 3
 #define MAX_LONG_CAMPOS 50
@@ -31,7 +48,7 @@
 
 /*enums y structs*/
 
-typedef enum {ST_OK, ST_ERROR_PUNTERO_NULO, ST_ERROR_NOMEM, ST_ERROR_CANT_ARGC, ST_ERROR_OPEN_ARCHIVO, ST_ERROR_TIME, ST_ERROR_DESTRUIR_ARREGLO, ST_ERROR_FLAGS, ST_ERROR_COMANDO, ST_ERROR_WRITE} status_t;
+typedef enum {ST_OK, ST_ERROR_PUNTERO_NULO, ST_ERROR_NOMEM, ST_ERROR_CANT_ARGC, ST_ERROR_OPEN_ARCHIVO, ST_ERROR_TIME, ST_ERROR_DESTRUIR_ARREGLO, ST_ERROR_FLAGS, ST_ERROR_COMANDO, ST_ERROR_WRITE, ST_LOG_ALTA, ST_LOG_BAJA, ST_LOG_MODIF} status_t;
 
 typedef enum {GESTION_ALTAS, GESTION_BAJAS, GESTION_MODIFICACION, GESTION_NULA} gestion_t;
 
