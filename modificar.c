@@ -127,8 +127,6 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 
 	if(argc != MAX_ARGC_GESTION)
 	{
-		printf("AAZ\n");
-
 		return ST_ERROR_FLAGS;
 	}
 
