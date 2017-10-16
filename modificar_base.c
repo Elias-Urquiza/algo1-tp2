@@ -252,7 +252,7 @@ status_t destruir_datos(t_datos **datos[])
 
 status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[])
 {
-	size_t i = 0, j;
+	size_t i = 2, j;
 
 	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
 		return ST_ERROR_PUNTERO_NULO;
@@ -314,7 +314,7 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 
 status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[])
 {
-	size_t i = 0, j;
+	size_t i = 2, j;
 
 	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
 		return ST_ERROR_PUNTERO_NULO;
@@ -361,7 +361,7 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 
 status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[])
 {
-	size_t i = 0, j;
+	size_t i = 2, j;
 
 	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
 		return ST_ERROR_PUNTERO_NULO;
@@ -370,7 +370,6 @@ status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro
 	{
 		i++;
 	}
-
 	if((pf = freopen(argv[i + 1], "wb", pf)) == NULL) /*erase the file*/
 	{
 		return ST_ERROR_OPEN_ARCHIVO;
@@ -378,20 +377,31 @@ status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro
 
 	for (i = 0, j = 0; datos_original[i]; i++)
 	{
-		if(datos_original[i]->id == datos_registro[j]->id)
+		if (datos_registro[j])
 		{
-			j++;
-		}
-		else if(datos_original[i]->id < datos_registro[j]->id)
-		{
-			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
-				return ST_ERROR_WRITE;
+			if(datos_original[i]->id == datos_registro[j]->id)
+			{
+				if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+				j++;
+
+			}
+			else if(datos_original[i]->id < datos_registro[j]->id)
+			{
+				if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+			}
+			else
+			{
+				j++;
+				i--;
+				/*aca es un caso de logueo*/
+			}
 		}
 		else
 		{
-			j++;
-			i--;
-			/*aca es un caso de logueo*/
+			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
 		}
 	}
 
