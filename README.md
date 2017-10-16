@@ -73,3 +73,10 @@ datos''.
 Saludos,
 --
 PATRICIO MORENO
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Bibligrafia
+
+H. M. Deitel y P. J. Deitel. Como programar en C/C++ y Java. 4ª Edición. Pearson
+Educación, 2004, ISBN 970-26-0531-8, págs 390 a 413.
+
+/*INSERT LINKS HERE*/
