@@ -288,6 +288,7 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 			else
 			{
 				j++; /*si los ids son iguales, no ecribimos el nuevo datos*/
+				/* Aca es un caso de logueo que debemos tratar*/
 			}
 		}
 
@@ -334,10 +335,16 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 		{
 			j++;
 		}
-		else
+		else if(datos_original[i]->id > datos_registro[j]->id)
 		{
 			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
 				return ST_ERROR_WRITE;
+		}
+		else
+		{
+			j++;
+			i--;
+			/*aca es un caso de logueo*/
 		}
 	}
 
