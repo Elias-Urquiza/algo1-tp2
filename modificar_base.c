@@ -201,6 +201,9 @@ status_t crear_datos(FILE *pf, t_datos **datos[])
 {
 	size_t i, n;
 
+	if (!pf || !datos)
+		return ST_ERROR_PUNTERO_NULO;
+
 	fseek(pf, 0, SEEK_END);
 	n = ftell(pf)/(sizeof(t_datos)); /*number of datos in the file*/
 	fseek(pf, 0, SEEK_SET);
@@ -231,6 +234,10 @@ status_t destruir_datos(t_datos **datos[])
 {
 	int i;
 
+	if (!datos)
+		return ST_ERROR_PUNTERO_NULO;
+
+
 	for (i = 0; (*datos)[i]; i++)
 	{
 		free((*datos)[i]);
@@ -247,6 +254,8 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 {
 	size_t i = 0, j;
 
+	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+		return ST_ERROR_PUNTERO_NULO;
 
 	while(argv[i][1] != CHAR_ORIG)
 	{
@@ -306,6 +315,8 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 {
 	size_t i = 0, j;
 
+	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+		return ST_ERROR_PUNTERO_NULO;
 
 	while(argv[i][1] != CHAR_ORIG)
 	{
