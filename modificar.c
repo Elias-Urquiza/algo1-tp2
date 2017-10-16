@@ -18,7 +18,7 @@
 status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion);
 status_t crear_datos(FILE *pf, t_datos **datos[]);
 status_t destruir_datos(t_datos **datos[]);
-status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf);
+status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[]);
 status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[]);
 status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[]);
 
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 	{
 	case GESTION_ALTAS:
 	{
-		if((estado = gestion_altas(datos_original, datos_registro, pf_original)) != ST_OK)
+		if((estado = gestion_altas(datos_original, datos_registro, pf_original, argv)) != ST_OK)
 		{
 			imprimir_error(estado, stderr);
 			return EXIT_FAILURE;
@@ -141,7 +141,7 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 		{
 		case CHAR_ORIG:
 		{
-			if((*pf_original = fopen(argv[i+1], "r+b")) == NULL)
+			if((*pf_original = fopen(argv[i+1], "rb")) == NULL)
 			{
 				return ST_ERROR_PUNTERO_NULO;
 			}
@@ -243,28 +243,68 @@ status_t destruir_datos(t_datos **datos[])
 }
 
 
-status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf)
+status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[])
 {
-	size_t i = 0;
-	size_t id;
-	int pos = 0;
+	size_t i = 0, j;
 
 
-	while(datos_registro[i] != NULL)
+	while(argv[i][1] != CHAR_ORIG)
 	{
-		id = datos_registro[i]->id;
-
-		while(id <= datos_original[pos]->id)
-			pos++;
-
-		if(datos_original[pos]->id != id)
-		{
-			fseek(pf, pos*(sizeof(t_datos)), SEEK_SET);
-			fwrite(datos_registro[i], sizeof(t_datos), 1, pf);
-		}
-
 		i++;
 	}
+
+	if((pf = freopen(argv[i + 1], "wb", pf)) == NULL) /*erase the file*/
+	{
+		return ST_ERROR_OPEN_ARCHIVO;
+	}
+
+	printf("%lu\n", datos_registro[2]->id );
+
+	for (i = 0, j =0; datos_original[i] != NULL || datos_registro[j] != NULL; )
+	{
+
+		if ((datos_original[i] != NULL) && (datos_registro[j] != NULL))
+		{
+			if (datos_original[i]->id < datos_registro[j]->id)
+			{
+				printf("1\n");
+				if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+				i++;
+			}
+			else if (datos_original[i]->id > datos_registro[j]->id)
+			{
+				printf("2\n");
+				if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+				j++;
+				printf("2bis\n");
+
+			}
+			else
+			{
+				printf("5\n");
+				j++; /*si los ids son iguales, no ecribimos el nuevo datos*/
+			}
+		}
+
+		else if (datos_original[i] != NULL)
+		{
+			printf("3\n");
+			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
+			i++;
+		}
+
+		else if (datos_registro[j] != NULL)
+		{
+			printf("4\n");
+			if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
+			j++;
+		}
+	}
+
 	return ST_OK;
 }
 
