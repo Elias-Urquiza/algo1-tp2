@@ -20,7 +20,7 @@ status_t crear_datos(FILE *pf, t_datos **datos[]);
 status_t destruir_datos(t_datos **datos[]);
 status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[]);
 status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[]);
-status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[]);
+status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[]);
 
 
 
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 	}
 	case GESTION_MODIFICACION:
 	{
-		if((estado = gestion_modificacion(datos_original, datos_registro)) != ST_OK)
+		if((estado = gestion_modificacion(datos_original, datos_registro, pf_original, argv)) != ST_OK)
 		{
 			imprimir_error(estado, stderr);
 			return EXIT_FAILURE;
@@ -331,11 +331,58 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 
 	for (i = 0, j = 0; datos_original[i]; i++)
 	{
+		if (datos_registro[j])
+		{
+			if(datos_original[i]->id == datos_registro[j]->id)
+			{
+				j++;
+			}
+			else if(datos_original[i]->id < datos_registro[j]->id)
+			{
+				if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+					return ST_ERROR_WRITE;
+			}
+			else
+			{
+				j++;
+				i--;
+				/*aca es un caso de logueo*/
+			}
+		}
+		else
+		{
+			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
+				return ST_ERROR_WRITE;
+		}
+	}
+
+	return ST_OK;
+}
+
+status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, char *argv[])
+{
+	size_t i = 0, j;
+
+	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+		return ST_ERROR_PUNTERO_NULO;
+
+	while(argv[i][1] != CHAR_ORIG)
+	{
+		i++;
+	}
+
+	if((pf = freopen(argv[i + 1], "wb", pf)) == NULL) /*erase the file*/
+	{
+		return ST_ERROR_OPEN_ARCHIVO;
+	}
+
+	for (i = 0, j = 0; datos_original[i]; i++)
+	{
 		if(datos_original[i]->id == datos_registro[j]->id)
 		{
 			j++;
 		}
-		else if(datos_original[i]->id > datos_registro[j]->id)
+		else if(datos_original[i]->id < datos_registro[j]->id)
 		{
 			if ((fwrite(datos_original[i], sizeof(t_datos), 1, pf)) != 1)
 				return ST_ERROR_WRITE;
@@ -347,12 +394,6 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 			/*aca es un caso de logueo*/
 		}
 	}
-
-	return ST_OK;
-}
-
-status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro[])
-{
 
 	return ST_OK;
 }
