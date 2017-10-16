@@ -12,7 +12,6 @@
 #define MSJ_ERROR_TIME "Error con la fecha."
 #define MSJ_ERROR_FLAGS "No se encuentra ningún flag."
 #define MSJ_ERROR_COMANDO "No se puede realizar la acción pedida."
-#define MSJ_ERROR "Error."
 
 #define MSJ_USO_GESTION "USO: ./gestion operacion -if base_datos -f archivo_registro -log archivo_logs"
 
@@ -23,7 +22,7 @@
 
 #define MAX_ARGC_DECO 2
 
-#define MAX_ARGC_GESTION 7
+#define MAX_ARGC_GESTION 8
 #define NUM_FLAGS 3
 
 /* */
