@@ -179,9 +179,9 @@ status_t validar_argumentos_deco(int argc, char* argv[], FILE **file, int numero
 
 status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion, size_t* pos_original)
 {
+	lectura_t original = NO_LEIDO, registro = NO_LEIDO, logger = NO_LEIDO; /*variables para evitar que el programa falle si se ingresa dos veces el mismo flag*/
 	const char *flag[] = {OPCION_ORIG, OPCION_REG, OPCION_LOG};
 	int i, j;
-
 	if(argc != MAX_ARGC_GESTION)
 	{
 		return ST_ERROR_FLAGS;
@@ -204,11 +204,14 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 		{
 		case CHAR_ORIG:
 		{
+			if(original == LEIDO)
+				break;
+
 			if((*pf_original = fopen(argv[i+1], "rb")) == NULL)
 			{
 				return ST_ERROR_PUNTERO_NULO;
 			}
-
+			original = LEIDO;
 			*pos_original = i + 1;
 
 			break;
@@ -216,19 +219,27 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 
 		case CHAR_REG:
 		{
+			if(registro == LEIDO)
+				break;
+
 			if((*pf_registro = fopen(argv[i+1], "rb")) == NULL)
 			{
 				return ST_ERROR_PUNTERO_NULO;
 			}
+			registro = LEIDO;
 			break;
 		}
 
 		case CHAR_LOG:
 		{
+			if(logger == LEIDO)
+				break;
+
 			if((*pf_log = fopen(argv[i+1], "ab")) == NULL)
 			{
 				return ST_ERROR_PUNTERO_NULO;
 			}
+			logger = LEIDO;
 			break;
 		}
 		default:

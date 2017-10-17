@@ -9,8 +9,8 @@ int main(int argc, char* argv[])
 {
 	status_t estado;
 	gestion_t accion;
-	FILE *pf_original, *pf_registro, *pf_log;
 	size_t pos_original;
+	FILE *pf_original, *pf_registro, *pf_log;
 	t_datos **datos_original = NULL;
 	t_datos **datos_registro = NULL;
 

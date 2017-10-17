@@ -52,6 +52,8 @@ typedef enum {ST_OK, ST_ERROR_PUNTERO_NULO, ST_ERROR_NOMEM, ST_ERROR_CANT_ARGC, 
 
 typedef enum {GESTION_ALTAS, GESTION_BAJAS, GESTION_MODIFICACION, GESTION_NULA} gestion_t;
 
+typedef enum {LEIDO, NO_LEIDO} lectura_t;
+
 typedef struct {
 	size_t id;
 	char nombre[MAX_LONG_CAMPOS];
