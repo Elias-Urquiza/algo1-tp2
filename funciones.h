@@ -21,7 +21,7 @@ status_t validar_argumentos_deco(int argc, char* argv[], FILE **file, int numero
 
 /*modificar_base*/
 
-status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion, size_t* pos_original);
+status_t validar_argumentos_modificar(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion, size_t* pos_original);
 status_t crear_datos(FILE *pf, t_datos **datos[]);
 status_t destruir_datos(t_datos **datos[]);
 status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FILE *pf, FILE *plog, char *argv[], size_t pos_original);

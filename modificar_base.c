@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	t_datos **datos_original = NULL;
 	t_datos **datos_registro = NULL;
 
-	if((estado = validar_argumentos_gestion(argc, argv, &pf_original, &pf_registro, &pf_log, &accion, &pos_original)) != ST_OK)
+	if((estado = validar_argumentos_modificar(argc, argv, &pf_original, &pf_registro, &pf_log, &accion, &pos_original)) != ST_OK)
 	{
 		imprimir_error(estado, stderr);
 		imprimir_uso_gestion();

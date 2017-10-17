@@ -25,7 +25,7 @@ status_t validar_argumentos_crear(int argc, char* argv[], FILE **file, int numer
 
 t_datos convertir_datos(char** arreglo)
 {
-	struct tm datetm = {0,0,0,1,0,0,0,0,0}; /* tm_mday puede tomar valores de 1 a 31 por ello elegí poner ese uno.*/
+	struct tm datetm = {0,0,0,1,0,0,0,0,0}; /* tm_mday puede tomar valores de 1 a 31*/
 	char datechar[MAX_LENGTH] = "";
 	char** datearreglo = NULL;
 	t_datos datos;
@@ -177,7 +177,7 @@ status_t validar_argumentos_deco(int argc, char* argv[], FILE **file, int numero
 
 /*modificar_base*/
 
-status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion, size_t* pos_original)
+status_t validar_argumentos_modificar(int argc, char* argv[], FILE** pf_original, FILE** pf_registro, FILE** pf_log, gestion_t* accion, size_t* pos_original)
 {
 	lectura_t original = NO_LEIDO, registro = NO_LEIDO, logger = NO_LEIDO; /*variables para evitar que el programa falle si se ingresa dos veces el mismo flag*/
 	const char *flag[] = {OPCION_ORIG, OPCION_REG, OPCION_LOG};
