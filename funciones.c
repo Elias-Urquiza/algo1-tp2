@@ -347,9 +347,8 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 		return ST_ERROR_OPEN_ARCHIVO;
 	}
 
-	for (i = 0, j =0; datos_original[i] != NULL || datos_registro[j] != NULL; )
+	for (i = 0, j = 0; datos_original[i] != NULL || datos_registro[j] != NULL; )
 	{
-
 		if ((datos_original[i] != NULL) && (datos_registro[j] != NULL))
 		{
 			if (datos_original[i]->id < datos_registro[j]->id)
@@ -542,7 +541,7 @@ void imprimir_error(status_t estado, FILE* salida)
 	case ST_ERROR_FLAG_DOBLE:
 		fprintf(salida, "%s\n", MSJ_ERROR_FLAG_DOBLE);
 		break;
-	
+
 	case ST_ERROR_COMANDO:
 		fprintf(salida, "%s\n", MSJ_ERROR_COMANDO);
 		break;
