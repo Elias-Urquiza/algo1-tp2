@@ -26,13 +26,13 @@ int main(int argc, char* argv[])
 		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
 	}
-	printf("Données créé avec succes\n");
+
 	if((estado = crear_datos(pf_registro, &datos_registro)) != ST_OK)
 	{
 		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
 	}
-	printf("Données créé avec succes\n");
+
 
 	switch(accion)
 	{

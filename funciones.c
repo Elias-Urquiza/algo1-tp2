@@ -225,7 +225,7 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 
 		case CHAR_LOG:
 		{
-			if((*pf_log = fopen(argv[i+1], "a+b")) == NULL)
+			if((*pf_log = fopen(argv[i+1], "ab")) == NULL)
 			{
 				return ST_ERROR_PUNTERO_NULO;
 			}
@@ -327,8 +327,6 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 	{
 		return ST_ERROR_OPEN_ARCHIVO;
 	}
-
-	printf("Préparation pour le réécriture\n");
 
 	for (i = 0, j =0; datos_original[i] != NULL || datos_registro[j] != NULL; )
 	{
