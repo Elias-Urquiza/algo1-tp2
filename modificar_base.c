@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	t_datos **datos_original = NULL;
 	t_datos **datos_registro = NULL;
 
-	if((estado = validar_argumentos_gestion(argc, argv, &pf_original, &pf_registro, &pf_log, &accion. &pos_original)) != ST_OK)
+	if((estado = validar_argumentos_gestion(argc, argv, &pf_original, &pf_registro, &pf_log, &accion, &pos_original)) != ST_OK)
 	{
 		imprimir_error(estado, stderr);
 		imprimir_uso_gestion();
@@ -26,13 +26,13 @@ int main(int argc, char* argv[])
 		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
 	}
-
+	printf("Données créé avec succes\n");
 	if((estado = crear_datos(pf_registro, &datos_registro)) != ST_OK)
 	{
 		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
 	}
-
+	printf("Données créé avec succes\n");
 
 	switch(accion)
 	{

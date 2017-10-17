@@ -320,7 +320,7 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 	size_t i, j;
 	struct tm date;
 
-	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+	if (!datos_original[0] || !datos_registro[0] || !pf || !plog || !argv[0])
 		return ST_ERROR_PUNTERO_NULO;
 
 	if((pf = freopen(argv[pos_original], "wb", pf)) == NULL) /*erase the file*/
@@ -328,6 +328,7 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 		return ST_ERROR_OPEN_ARCHIVO;
 	}
 
+	printf("Préparation pour le réécriture\n");
 
 	for (i = 0, j =0; datos_original[i] != NULL || datos_registro[j] != NULL; )
 	{
@@ -341,7 +342,7 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 				i++;
 			}
 
-			if (datos_original[i]->id > datos_registro[j]->id)
+			else if (datos_original[i]->id > datos_registro[j]->id)
 			{
 				if ((fwrite(datos_registro[j], sizeof(t_datos), 1, pf)) != 1)
 					return ST_ERROR_WRITE;
@@ -351,12 +352,12 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 			else
 			{
 				/*imprime aviso de logueo y datos decodificados en log*/
-				imprimir_error(caso_logueo, p_log);
+				imprimir_error(caso_logueo, plog);
 
-				date = *gmtime(&datos_registro[j].date);
+				date = *gmtime(&(datos_registro[j]->date));
 				date.tm_year += ANIO_PARTIDA;
 				date.tm_mon += 1;
-				impresion_datos(p_log, datos_registro[j], date);
+				impresion_datos(plog, *datos_registro[j], date);
 				j++;
 			}
 		}
@@ -387,7 +388,7 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 	status_t caso_logueo = ST_LOG_BAJA;
 	struct tm date;
 
-	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+	if (!datos_original[0] || !datos_registro[0] || !pf || !plog|| !argv[0])
 		return ST_ERROR_PUNTERO_NULO;
 
 	if((pf = freopen(argv[pos_original], "wb", pf)) == NULL) /*erase the file*/
@@ -411,12 +412,12 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 			else
 			{
 				/*imprime un mensaje de aviso de logueo en log e imprime el item decodificado*/
-				imprimir_error(caso_logueo, p_log);
+				imprimir_error(caso_logueo, plog);
 
-				date = *gmtime(&datos_registro[j].date);
+				date = *gmtime(&(datos_registro[j]->date));
 				date.tm_year += ANIO_PARTIDA;
 				date.tm_mon += 1;
-				impresion_datos(p_log, datos_registro[j], date);
+				impresion_datos(plog, *datos_registro[j], date);
 				j++;
 				i--;
 			}
@@ -438,7 +439,7 @@ status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro
 	size_t i, j;
 	struct tm date;
 
-	if (!datos_original[0] || !datos_registro[0] || !pf || !argv[0])
+	if (!datos_original[0] || !datos_registro[0] || !pf || !plog || !argv[0])
 		return ST_ERROR_PUNTERO_NULO;
 
 	if((pf = freopen(argv[pos_original], "wb", pf)) == NULL) /*erase the file*/
@@ -465,12 +466,12 @@ status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro
 			else
 			{
 				/*imprime mensaje de logueo y los datos decodificados en el log*/
-				imprimir_error(caso_logueo, p_log);
+				imprimir_error(caso_logueo, plog);
 
-				date = *gmtime(&datos_registro[j].date);
+				date = *gmtime(&(datos_registro[j]->date));
 				date.tm_year += ANIO_PARTIDA;
 				date.tm_mon += 1;
-				impresion_datos(p_log, datos_registro[j], date);
+				impresion_datos(plog, *datos_registro[j], date);
 				j++;
 				i--;
 			}
