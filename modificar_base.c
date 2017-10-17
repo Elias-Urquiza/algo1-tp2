@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 	default:
 	{
 		estado = ST_ERROR_COMANDO;
-		imprimir_error(estado, pf_log);         /*imprime en el log*/
+		imprimir_error(estado, stderr);
 		return EXIT_FAILURE;
 	}
 	}

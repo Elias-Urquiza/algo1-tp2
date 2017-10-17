@@ -39,6 +39,7 @@
 #define MAX_ARGC_CREAR 3
 #define MAX_LONG_CAMPOS 50
 #define ANIO_PARTIDA 1900
+#define MES_PARTIDA 1
 
 #define MAX_ARGC_DECO 2
 

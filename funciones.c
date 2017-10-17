@@ -42,23 +42,21 @@ t_datos convertir_datos(char** arreglo)
 	if(estado != ST_OK)
 	{
 		imprimir_error(estado, stderr);
-		/*NO SE QUE MAS PONER AQUI*/
 	}
 	datetm.tm_year = atoi(datearreglo[0]) - ANIO_PARTIDA;
-	datetm.tm_mon = atoi(datearreglo[1]) - 1;
+	datetm.tm_mon = atoi(datearreglo[1]) - MES_PARTIDA;
 	datetm.tm_mday = atoi(datearreglo[2]);
 	if ((datos.date = mktime(&datetm)) == -1)
 	{
 		estado = ST_ERROR_TIME;
 		imprimir_error(estado, stderr);
-		datos.date = time(NULL); /*comprobar si esto sirve*/
+		datos.date = time(NULL); /*Devuelve la fecha actual en caso de error*/
 	}
 
 	if (destruir_arreglo_cadenas(&datearreglo, l) != ST_OK)
 	{
 		estado = ST_ERROR_DESTRUIR_ARREGLO;
 		imprimir_error(estado, stderr);
-		/*deberiamos hacer algo más aquí?*/
 	}
 
 	datos.puntaje = atof(arreglo[5]);
@@ -66,7 +64,6 @@ t_datos convertir_datos(char** arreglo)
 
 	return datos;
 }
-
 
 
 char* strdup(const char* sc)
@@ -77,7 +74,7 @@ char* strdup(const char* sc)
 	if(sc == NULL)
 		return NULL;
 
-	l = strlen(sc) + 1;
+	l = strlen(sc) + 1; /*se le suma uno para hacer lugar al '\0'*/
 
 	s = (char*)malloc(sizeof(char)*(l));
 
@@ -86,7 +83,8 @@ char* strdup(const char* sc)
 	return s;
 }
 
-status_t destruir_arreglo_cadenas(char ***campos, size_t size) /*agregar verificación si saben cual poner*/
+
+status_t destruir_arreglo_cadenas(char ***campos, size_t size)
 {
 	size_t i;
 
@@ -101,6 +99,7 @@ status_t destruir_arreglo_cadenas(char ***campos, size_t size) /*agregar verific
 
 	return ST_OK;
 }
+
 
 char** split(const char* cadena, char delimitador, size_t* l, status_t* p_estado)
 {
@@ -273,6 +272,7 @@ status_t validar_argumentos_modificar(int argc, char* argv[], FILE** pf_original
 
 	default:
 		*accion = GESTION_NULA;
+		return ST_ERROR_COMANDO;
 	}
 
 	return ST_OK;
@@ -372,7 +372,7 @@ status_t gestion_altas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 
 				date = *gmtime(&(datos_registro[j]->date));
 				date.tm_year += ANIO_PARTIDA;
-				date.tm_mon += 1;
+				date.tm_mon += MES_PARTIDA;
 				impresion_datos(plog, *datos_registro[j], date);
 				j++;
 			}
@@ -432,7 +432,7 @@ status_t gestion_bajas(t_datos *datos_original[], t_datos *datos_registro[], FIL
 
 				date = *gmtime(&(datos_registro[j]->date));
 				date.tm_year += ANIO_PARTIDA;
-				date.tm_mon += 1;
+				date.tm_mon += MES_PARTIDA;
 				impresion_datos(plog, *datos_registro[j], date);
 				j++;
 				i--;
@@ -486,7 +486,7 @@ status_t gestion_modificacion(t_datos *datos_original[], t_datos *datos_registro
 
 				date = *gmtime(&(datos_registro[j]->date));
 				date.tm_year += ANIO_PARTIDA;
-				date.tm_mon += 1;
+				date.tm_mon += MES_PARTIDA;
 				impresion_datos(plog, *datos_registro[j], date);
 				j++;
 				i--;
