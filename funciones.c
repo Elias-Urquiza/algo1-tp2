@@ -202,50 +202,58 @@ status_t validar_argumentos_gestion(int argc, char* argv[], FILE** pf_original, 
 
 		switch(flag[j][1]) /*segun el caracter principal de cada opcion*/
 		{
-		case CHAR_ORIG:
-		{
-			if(original == LEIDO)
-				break;
-
-			if((*pf_original = fopen(argv[i+1], "rb")) == NULL)
+			case CHAR_ORIG:
 			{
-				return ST_ERROR_PUNTERO_NULO;
-			}
-			original = LEIDO;
-			*pos_original = i + 1;
+				if(original == LEIDO)
+				{
+					return ST_ERROR_FLAG_DOBLE;
+					break;
+				}
+				if((*pf_original = fopen(argv[i+1], "rb")) == NULL)
+				{
+					return ST_ERROR_PUNTERO_NULO;
+				}
+				original = LEIDO;
+				*pos_original = i + 1;
 
-			break;
-		}
-
-		case CHAR_REG:
-		{
-			if(registro == LEIDO)
 				break;
-
-			if((*pf_registro = fopen(argv[i+1], "rb")) == NULL)
-			{
-				return ST_ERROR_PUNTERO_NULO;
 			}
-			registro = LEIDO;
-			break;
-		}
 
-		case CHAR_LOG:
-		{
-			if(logger == LEIDO)
+			case CHAR_REG:
+			{
+				if(registro == LEIDO)
+					{
+						return ST_ERROR_FLAG_DOBLE;
+						break;
+					}
+
+				if((*pf_registro = fopen(argv[i+1], "rb")) == NULL)
+				{
+					return ST_ERROR_PUNTERO_NULO;
+				}
+				registro = LEIDO;
 				break;
-
-			if((*pf_log = fopen(argv[i+1], "ab")) == NULL)
-			{
-				return ST_ERROR_PUNTERO_NULO;
 			}
-			logger = LEIDO;
-			break;
-		}
-		default:
-		{
-			return ST_ERROR_FLAGS;
-		}
+
+			case CHAR_LOG:
+			{
+				if(logger == LEIDO)
+					{
+						return ST_ERROR_FLAG_DOBLE;
+						break;
+					}
+
+				if((*pf_log = fopen(argv[i+1], "ab")) == NULL)
+				{
+					return ST_ERROR_PUNTERO_NULO;
+				}
+				logger = LEIDO;
+				break;
+			}
+			default:
+			{
+				return ST_ERROR_FLAGS;
+			}
 		}
 	}
 
@@ -531,6 +539,10 @@ void imprimir_error(status_t estado, FILE* salida)
 		fprintf(salida, "%s\n", MSJ_ERROR_FLAGS);
 		break;
 
+	case ST_ERROR_FLAG_DOBLE:
+		fprintf(salida, "%s\n", MSJ_ERROR_FLAG_DOBLE);
+		break;
+	
 	case ST_ERROR_COMANDO:
 		fprintf(salida, "%s\n", MSJ_ERROR_COMANDO);
 		break;

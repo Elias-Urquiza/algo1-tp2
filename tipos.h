@@ -11,6 +11,7 @@
 #define MSJ_ERROR_DESTRUIR_ARREGLO "Error al destruir el arreglo."
 #define MSJ_ERROR_TIME "Error con la fecha."
 #define MSJ_ERROR_FLAGS "No se encuentra ningún flag."
+#define MSJ_ERROR_FLAG_DOBLE "No se puede ingresar más de una vez el mismo flag."
 #define MSJ_ERROR_COMANDO "No se puede realizar la acción pedida."
 #define MSJ_ERROR_WRITE "No se puede escribir en el archivo."
 #define MSJ_ERROR "Error No Catalogado."
@@ -48,7 +49,7 @@
 
 /*enums y structs*/
 
-typedef enum {ST_OK, ST_ERROR_PUNTERO_NULO, ST_ERROR_NOMEM, ST_ERROR_CANT_ARGC, ST_ERROR_OPEN_ARCHIVO, ST_ERROR_TIME, ST_ERROR_DESTRUIR_ARREGLO, ST_ERROR_FLAGS, ST_ERROR_COMANDO, ST_ERROR_WRITE, ST_LOG_ALTA, ST_LOG_BAJA, ST_LOG_MODIF} status_t;
+typedef enum {ST_OK, ST_ERROR_PUNTERO_NULO, ST_ERROR_NOMEM, ST_ERROR_CANT_ARGC, ST_ERROR_OPEN_ARCHIVO, ST_ERROR_TIME, ST_ERROR_DESTRUIR_ARREGLO, ST_ERROR_FLAGS, ST_ERROR_FLAG_DOBLE, ST_ERROR_COMANDO, ST_ERROR_WRITE, ST_LOG_ALTA, ST_LOG_BAJA, ST_LOG_MODIF} status_t;
 
 typedef enum {GESTION_ALTAS, GESTION_BAJAS, GESTION_MODIFICACION, GESTION_NULA} gestion_t;
 
