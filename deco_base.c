@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	if ((pf_salida = fopen("datos_deco.csv", "wb")) == NULL)
+	if ((pf_salida = fopen(DOC_DECO, "wb")) == NULL)
 	{
 		st = ST_ERROR_OPEN_ARCHIVO;
 		imprimir_error(st, stderr);

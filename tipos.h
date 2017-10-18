@@ -23,6 +23,7 @@
 /*modificar_base*/
 #define MSJ_USO_GESTION "USO: ./modificar_base operacion -if base_datos -f archivo_registro -log archivo_logs"
 
+#define DOC_DECO "datos_deco.csv"
 #define OPCION_ORIG "-if"
 #define OPCION_REG "-f"
 #define OPCION_LOG "-log"
