@@ -46,7 +46,11 @@ int main (int argc, char *argv[])
 
 		datos = convertir_datos(arreglo);
 
-		fwrite(&datos, sizeof(t_datos), 1, pf_salida);
+		if (fwrite(&datos, sizeof(t_datos), 1, pf_salida) != 1)
+		{
+			st = ST_ERROR_WRITE;
+			imprimir_error(st, stderr);
+		}
 
 		if ((st = destruir_arreglo_cadenas(&arreglo, l)) != ST_OK)
 		{
@@ -54,7 +58,6 @@ int main (int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 	}
-
 
 	fclose(pf_entrada);
 	fclose(pf_salida);
