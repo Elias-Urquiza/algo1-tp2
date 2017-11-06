@@ -33,7 +33,8 @@ int main(int argc, char* argv[])
 		date = *gmtime(&datos.date);
 		date.tm_year += ANIO_PARTIDA;
 		date.tm_mon += 1;
-		impresion_datos(pf_salida, datos, date);
+		impresion_datos(pf_salida, datos, date); /*imprime en DOC_DECO*/
+		impresion_datos(stdout, datos, date); /*imprime por pantalla*/
 	}
 
 
